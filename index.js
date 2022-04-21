@@ -34,6 +34,21 @@ app.get('/',(req, res)=>{
     })
 });
 
+//show article this slug
+app.get('/article/:slug', (req, res) =>{
+    let query = `SELECT * FROM joga_mysql.article WHERE slug='${req.params.slug}'`;
+    let article;
+    con.query(query, (err, result) =>{
+        if (err) throw err;
+        console.log(result);
+        article = result;
+        res.render('article', {
+            article: article
+        });
+    })
+})
+
+
 //create db connection
 var con = mysql.createConnection({
     host: "localhost",
