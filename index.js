@@ -21,9 +21,19 @@ const bodyParser = require('body-parser')
 
 app.use(bodyParser.urlencoded({extended: true}))
 
-/*app.get('/', function(req,res){
-  res.send('Hello world')
-})*/
+app.get('/',(req, res)=>{
+    let query = "SELECT * FROM joga_mysql.article";
+    let articles = [];
+    con.query(query, (err, result) => {
+        if(err) throw err;
+        articles = result
+
+        res.render("index",{
+            articles: articles
+        })
+    })
+});
+
 //create db connection
 var con = mysql.createConnection({
     host: "localhost",
@@ -40,6 +50,7 @@ con.connect(function (err){
 app.listen(3001, () => {
     console.log("app is started at http://localhost:3001")
 });
+
 
 
 
