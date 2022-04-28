@@ -36,7 +36,8 @@ app.get('/',(req, res)=>{
 
 //show article this slug
 app.get('/article/:slug', (req, res) =>{
-    let query = `SELECT * FROM joga_mysql.article WHERE slug='${req.params.slug}'`;
+    let query = `SELECT joga_mysql.article.name, joga_mysql.article.slug, article.image, article.body, article.published, joga_mysql.author.name FROM joga_mysql.article INNER JOIN joga_mysql.author ON article.author_id=joga_mysql.author.id WHERE slug='${req.params.slug}'`;
+
     let article;
     con.query(query, (err, result) =>{
         if (err) throw err;
@@ -61,6 +62,11 @@ con.connect(function (err){
     if (err) throw err;
     console.log("Connected to joga_mysql db");
 })
+
+const articleRoutes = require('./routes/article');
+
+app.use('/', articleRoutes);
+app.use('/article', articleRoutes);
 
 app.listen(3001, () => {
     console.log("app is started at http://localhost:3001")
